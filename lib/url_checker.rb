@@ -8,14 +8,7 @@ class UrlChecker
 
 
   def self.check_urls(urls)
-    begin
-      parsed_urls = JSON.parse(urls)
-
-      checker.check_urls(parsed_urls)
-    rescue JSON::ParserError => e
-      JSON.generate({status: "failed", message: "Invalid JSON. #{e.message}"})
-    end
-
+    CheckerJob.queue(urls)
   end
 
   private
