@@ -4,7 +4,7 @@ Gem to check the status codes returned by a provided list of URLs.
 ###Usage
         UrlChecker.check_urls(urls)
 
-The UrlChecker class exposes one public interface, the #check_urls method. This method takes a single argument that should be a JSON formatted string representing the URLs that are to be checked. UrlChecker will traverse the entire JSON object, pulling all key/value pairs with a key of "url" and then use the key's value as the URL to check.
+The UrlChecker class exposes one public interface, the #check_urls method. This method takes a single argument that should be a JSON formatted string representing the URLs that are to be checked. UrlChecker will traverse the entire JSON object, pulling all key/value pairs with a key of "url" and then use the key's value as the URL to check. The UrlChecker will check urls in a background resque job and invoke a user defined callback upon completion. The Resque queue is named url_checker_queue so if you're starting your resque queues explicity, you must have a queue with that name.
 
 ###Examples
 Example usage:<br/>
@@ -12,7 +12,7 @@ Example usage:<br/>
         UrlChecker.check_urls("{\"awards\":[{\"id\":1,\"url\":\"http://www.fastweb.com/\"},{\"id\":2,\"url\":\"https://www.google.com/\"},{\"id\":3,\"url\":\"invalid url\"},{\"id\":4,\"url\":\"www.cnn.com\"}]}")
 </code>
 
-UrlChecker will return a JSON formatted string separating URLs with a successful status code, 2XX or 3XX, from those with a failed status code, 4XX or 5XX. Successful URLs are returned under the key "success" while failed URLs are returned under the key "failed". Deatils about the success/failed status can be access under the key "validity". All key/value pairs at the same nesting level as any found "url" keys will be returned as well so that you can provide metadata about the URLs being checked for identification purposes.
+Upon completion, UrlChecker will invoke a callback method that must be defined by the user's application. The application must have a class named UrlCheckerResultsProcessor and define a #process_results(results) method. The parameter to the #process_results method will be a JSON formatted string separating URLs with a successful status code, 2XX or 3XX, from those with a failed status code, 4XX or 5XX. Successful URLs are returned under the key "success" while failed URLs are returned under the key "failed". Deatils about the success/failed status can be access under the key "validity". All key/value pairs at the same nesting level as any found "url" keys will be returned as well so that you can provide metadata about the URLs being checked for identification purposes.
 
 Example return value:<br/>
 <code>
