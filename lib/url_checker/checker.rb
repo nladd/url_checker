@@ -24,13 +24,17 @@ class Checker
 
         net = Net::HTTP.new(uri.host, uri.port)
         net.use_ssl = uri.scheme == "https" ? true : false
-        res = net.request_head(uri.path.empty? ? "/" : uri.path)
+        begin
+          res = net.request_head(uri.path.empty? ? "/" : uri.path)
 
-        res_code = res.code.to_i
-        if res_code >= 200 && res_code < 400
-          [true, "HTTP response code: #{res_code}", res_code]
-        elsif res_code >= 400 && res_code < 600
-          [false, "HTTP response code: #{res_code}", res_code]
+          res_code = res.code.to_i
+          if res_code >= 200 && res_code < 400
+            [true, "HTTP response code: #{res_code}", res_code]
+          elsif res_code >= 400 && res_code < 600
+            [false, "HTTP response code: #{res_code}", res_code]
+          end
+        rescue => e
+          [false, e.message]
         end
 
       end
