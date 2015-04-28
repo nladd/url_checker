@@ -1,7 +1,7 @@
 class CheckerJob
   @queue = :url_checker_queue
 
-  def self.perform
+  def self.perform(urls)
     begin
       parsed_urls = JSON.parse(urls)
 
