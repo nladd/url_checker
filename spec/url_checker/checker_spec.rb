@@ -11,8 +11,6 @@ RSpec.describe Checker do
     it "checks if the given urls are valid" do
       results = JSON.parse(checker.check_urls(url_json))
 
-      puts results.inspect
-
       expect(results["success"].size).to eq(2)
       expect(results["failed"].size).to eq(2)
     end

@@ -1,5 +1,7 @@
 
 require 'rspec'
-require 'url_checker/checker'
 require 'pry'
 
+require 'url_checker'
+require 'url_checker/checker'
+require 'url_checker/checker_job'

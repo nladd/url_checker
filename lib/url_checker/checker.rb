@@ -11,7 +11,7 @@ class Checker
     @results = {success: [], failed: []}
     traverse_urls(urls)
 
-    JSON.generate(@results)
+    @results
   end
 
   private
