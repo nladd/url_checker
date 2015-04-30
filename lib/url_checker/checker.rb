@@ -2,6 +2,7 @@ require 'json'
 require 'open-uri'
 require 'net/http'
 
+module UrlChecker
 class Checker
 
   def initialize; end
@@ -22,7 +23,11 @@ class Checker
 
         return [false, "No protocol specified for URL"] if URI::Generic == uri.class
 
-        net = Net::HTTP.new(uri.host, uri.port)
+        if Configuration.proxy_configured?
+          net = Net::HTTP.new(uri.host, uri.port, Configuration.proxy_host, Configuration.proxy_port, Configuration.proxy_user, Configuration.proxy_password)
+        else
+          net = Net::HTTP.new(uri.host, uri.port)
+        end
         net.use_ssl = uri.scheme == "https" ? true : false
         begin
           res = net.request_head(uri.path.empty? ? "/" : uri.path)
@@ -65,5 +70,5 @@ class Checker
     end
   end
 
-
+end
 end

@@ -1,3 +1,4 @@
+module UrlChecker
 class CheckerJob
   @queue = :url_checker_queue
 
@@ -20,4 +21,5 @@ class CheckerJob
   def self.queue(urls)
     Resque.enqueue(self, urls)
   end
+end
 end

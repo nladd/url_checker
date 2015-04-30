@@ -6,6 +6,18 @@ Gem to check the status codes returned by a provided list of URLs.
 
 The UrlChecker class exposes one public interface, the #check_urls method. This method takes a single argument that should be a JSON formatted string representing the URLs that are to be checked. UrlChecker will traverse the entire JSON object, pulling all key/value pairs with a key of "url" and then use the key's value as the URL to check. The UrlChecker will check urls in a background resque job and invoke a user defined callback upon completion. The Resque queue is named url_checker_queue so if you're starting your resque queues explicity, you must have a queue with that name.
 
+###Configuration
+The UrlChecker provides a #config method that accepts a block to set configuration parameters. Current allowed configuration parameters are as follows:
+<code>
+UrlChecker.config do |config|
+  config.proxy_host = "proxy_host"
+  config.proxy_port = 3000
+  config.proxy_user = "user"
+  config.proxy_password = "password"
+end
+</code>
+
+
 ###Examples
 Example usage:<br/>
 <code>
