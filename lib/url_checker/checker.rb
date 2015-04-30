@@ -28,8 +28,8 @@ class Checker
         else
           net = Net::HTTP.new(uri.host, uri.port)
         end
-        net.use_ssl = uri.scheme == "https" ? true : false
         begin
+          net.use_ssl = uri.scheme == "https" ? true : false
           res = net.request_head(uri.path.empty? ? "/" : uri.path)
 
           res_code = res.code.to_i

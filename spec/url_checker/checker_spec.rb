@@ -15,5 +15,20 @@ RSpec.describe UrlChecker::Checker do
       expect(results[:failed].size).to eq(2)
     end
 
+    it "should use a proxy if configured" do
+      UrlChecker.config do |config|
+        config.proxy_host = "proxy_host"
+        config.proxy_port = 3000
+        config.proxy_user = "user"
+        config.proxy_password = "password"
+      end
+
+      uri = URI.parse("http://www.fastweb.com")
+      expect(Net::HTTP).to receive(:new).with(uri.host, uri.port, UrlChecker::Configuration.proxy_host, UrlChecker::Configuration.proxy_port, UrlChecker::Configuration.proxy_user, UrlChecker::Configuration.proxy_password)
+
+      results = checker.check_urls({awards: [ {id: 1, url: "http://www.fastweb.com/"} ]})
+
+    end
+
   end
 end
