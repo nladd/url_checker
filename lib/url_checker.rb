@@ -8,7 +8,7 @@ module UrlChecker
 
   class << self
 
-    def self.check_urls(urls)
+    def check_urls(urls)
       UrlChecker::CheckerJob.queue(urls)
     end
 
