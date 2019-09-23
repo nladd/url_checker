@@ -37,11 +37,14 @@ class Checker
             [true, "HTTP response code: #{res_code}", res_code]
           elsif res_code >= 400 && res_code < 600
             [false, "HTTP response code: #{res_code}", res_code]
+          else
+            [false, "Unrecognized HTTP response code: #{res_code}", res_code]
           end
         rescue => e
           [false, e.message]
         end
-
+      else
+        [false, "Failed to parse url"]
       end
     rescue URI::InvalidURIError => e
       [false, e.message]
